@@ -1,0 +1,385 @@
+import { Link,useNavigate,} from "react-router-dom";
+import {useEffect,useState,} from "react";
+import { Menu,X,} from "lucide-react";
+function Navbar() {
+  const navigate = useNavigate();
+  const role =
+    localStorage.getItem("role");
+  const [time, setTime] =
+    useState(new Date());
+  const [menuOpen, setMenuOpen] =
+    useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+
+    return () =>
+      clearInterval(interval);
+  }, []);
+  const logout = () => {
+    localStorage.clear();
+    navigate("/");
+  };
+  const formatTime = (
+    timezone
+  ) => {
+    return time.toLocaleTimeString(
+      "en-US",
+      {
+        timeZone: timezone,
+      }
+    );
+  };
+  return (
+    <div
+      className="
+      bg-[#262727]
+      text-white
+      border-b
+      border-[#1f2a4d]
+      relative
+      z-50
+    "
+    >
+      {/* TOP NAVBAR qismi */}
+      <div
+        className="
+        flex
+        items-center
+        justify-between
+        px-4
+        sm:px-6
+        lg:px-10
+        py-5
+      "
+      >
+        {/* LOGO qismi */}
+        <div
+          className="
+          flex
+          items-center
+          min-w-[100px]
+          "
+        >
+          <img
+          src="/logo.png"
+          alt="logo"
+          className="
+          w-20
+          h-20
+          md:w-24
+          md:h-24
+          object-contain
+          "
+        />
+        </div>
+        {/* DESKTOP MENU qismi */}
+        <div
+          className="
+          hidden
+          xl:flex
+          items-center
+          gap-16
+          ml-10
+          
+        "
+        >
+          {/* LINKS/linklar */}
+          <div className="flex gap-8">
+            <Link
+              to="/books"
+              className="
+              font-bold
+              text-2xl
+              hover:text-red-700
+              duration-300
+            "
+            >
+              Books
+            </Link>
+            {role === "ADMIN" && (
+              <Link
+                to="/users"
+                className="
+                font-bold
+                text-2xl
+                hover:text-red-700
+                duration-500
+              "
+              >
+                Users
+              </Link>
+            )}
+            <Link
+              to="/orders"
+              className="
+              font-bold
+              text-2xl
+              hover:text-red-700
+              duration-500
+            "
+            >
+              Orders
+            </Link>
+          </div>
+
+          {/* CLOCKS */}
+          <div
+            className="
+            flex
+            gap-8
+            font-semibold
+            text-[#B17A50]
+            text-base
+          "
+          >
+            <p>
+              Tashkent:{" "}
+              {formatTime(
+                "Asia/Tashkent"
+              )}
+            </p>
+            <p>
+              Moscow:{" "}
+              {formatTime(
+                "Europe/Moscow"
+              )}
+            </p>
+            <p>
+              London:{" "}
+              {formatTime(
+                "Europe/London"
+              )}
+            </p>
+            <p>
+              Washington:{" "}
+              {formatTime(
+                "America/New_York"
+              )}
+            </p>
+          </div>
+
+          {/* BUTTONS/Buttonlar */}
+          <div className="flex gap-4">
+            <Link
+              to="/profile"
+              className="
+              bg-indigo-700
+              hover:bg-indigo-900
+              hover:text-black
+              duration-500
+              px-6
+              py-3
+              rounded-2xl
+              font-bold
+            "
+            >
+              Profile
+            </Link>
+            <button
+              onClick={logout}
+              className="
+              bg-red-500
+              hover:bg-red-700
+              hover:text-black
+              duration-500
+              px-6
+              py-3
+              rounded-2xl
+              font-bold
+              cursor-pointer
+            "
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+        {/* MOBILE BUTTON qismi*/}
+        <button
+          onClick={() =>
+            setMenuOpen(!menuOpen)
+          }
+          className="
+          xl:hidden
+          cursor-pointer
+        "
+        >
+          {menuOpen ? (
+            <X size={34} />
+          ) : (
+            <Menu size={34} />
+          )}
+        </button>
+      </div>
+      {/* MOBILE MENU qismi */}
+      {menuOpen && (
+        <div
+          className="
+          xl:hidden
+          bg-[#0b1739]
+          border-t
+          border-[#1f2a4d]
+          px-6
+          py-6
+          flex
+          flex-col
+          gap-5
+        "
+        >
+          {/* CLOCKS */}
+          <div
+            className="
+            flex
+            flex-col
+            gap-3
+            text-[#B17A50]
+            font-semibold
+            text-sm
+            pb-4
+            border-b
+            border-[#1f2a4d]
+          "
+          >
+
+            <p>
+              Tashkent:{" "}
+              {formatTime(
+                "Asia/Tashkent"
+              )}
+            </p>
+
+            <p>
+              Moscow:{" "}
+              {formatTime(
+                "Europe/Moscow"
+              )}
+            </p>
+
+            <p>
+              London:{" "}
+              {formatTime(
+                "Europe/London"
+              )}
+            </p>
+
+            <p>
+              Washington:{" "}
+              {formatTime(
+                "America/New_York"
+              )}
+            </p>
+
+          </div>
+
+          {/* LINKS */}
+          <div
+            className="
+            flex
+            flex-col
+            gap-5
+            pt-2
+          "
+          >
+            <Link
+              to="/books"
+              onClick={() =>
+                setMenuOpen(false)
+              }
+              className="
+              text-xl
+              font-bold
+              hover:text-red-500
+              duration-500
+            "
+            >
+              Books
+            </Link>
+
+            {role === "ADMIN" && (
+              <Link
+                to="/users"
+                onClick={() =>
+                  setMenuOpen(false)
+                }
+                className="
+                text-xl
+                font-bold
+                hover:text-red-500
+                duration-300
+              "
+              >
+                Users
+              </Link>
+            )}
+
+            <Link
+              to="/orders"
+              onClick={() =>
+                setMenuOpen(false)
+              }
+              className="
+              text-xl
+              font-bold
+              hover:text-red-500
+              duration-300
+            "
+            >
+              Orders
+            </Link>
+
+          </div>
+
+          {/* BUTTONS */}
+          <div
+            className="
+            flex
+            flex-col
+            gap-4
+            pt-4
+          "
+          >
+
+            <Link
+              to="/profile"
+              onClick={() =>
+                setMenuOpen(false)
+              }
+              className="
+              bg-indigo-700
+              hover:bg-indigo-900
+              hover:text-white
+              duration-300
+              px-6
+              py-3
+              rounded-2xl
+              font-bold
+              text-center
+            "
+            >
+              Profile
+            </Link>
+            <button
+              onClick={logout}
+              className="
+              bg-red-500
+              hover:bg-red-700
+              hover:text-black
+              duration-500
+              px-6
+              py-3
+              rounded-2xl
+              font-bold
+              cursor-pointer
+            "
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+export default Navbar;
