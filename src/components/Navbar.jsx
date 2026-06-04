@@ -1,8 +1,12 @@
 import { Link,useNavigate,} from "react-router-dom";
 import {useEffect,useState,} from "react";
 import { Menu,X,} from "lucide-react";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "./LanguageSwitcher";
+
 function Navbar() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const role =
     localStorage.getItem("role");
   const [time, setTime] =
@@ -11,17 +15,21 @@ function Navbar() {
     useState(false);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTime(new Date());
-    }, 1000);
+  const interval = setInterval(() => {
+    setTime(new Date());
+  }, 1000);
 
-    return () =>
-      clearInterval(interval);
-  }, []);
-  const logout = () => {
-    localStorage.clear();
-    navigate("/");
-  };
+  return () =>
+    clearInterval(interval);
+}, []);
+
+const logout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("role");
+  localStorage.removeItem("user");
+
+  navigate("/");
+};
   const formatTime = (
     timezone
   ) => {
@@ -81,7 +89,7 @@ function Navbar() {
           hidden
           xl:flex
           items-center
-          gap-16
+          gap-8
           ml-10
           
         "
@@ -97,7 +105,7 @@ function Navbar() {
               duration-300
             "
             >
-              Books
+              {t("books")}
             </Link>
             {role === "ADMIN" && (
               <Link
@@ -109,7 +117,7 @@ function Navbar() {
                 duration-500
               "
               >
-                Users
+                {t("users")}
               </Link>
             )}
             <Link
@@ -121,7 +129,7 @@ function Navbar() {
               duration-500
             "
             >
-              Orders
+              {t("orders")}
             </Link>
           </div>
 
@@ -136,25 +144,25 @@ function Navbar() {
           "
           >
             <p>
-              Tashkent:{" "}
+              {t("tashkent")}:{" "}
               {formatTime(
                 "Asia/Tashkent"
               )}
             </p>
             <p>
-              Moscow:{" "}
+              {t("moscow")}:{" "}
               {formatTime(
                 "Europe/Moscow"
               )}
             </p>
             <p>
-              London:{" "}
+              {t("london")}:{" "}
               {formatTime(
                 "Europe/London"
               )}
             </p>
             <p>
-              Washington:{" "}
+              {t("washington")}:{" "}
               {formatTime(
                 "America/New_York"
               )}
@@ -162,7 +170,8 @@ function Navbar() {
           </div>
 
           {/* BUTTONS/Buttonlar */}
-          <div className="flex gap-4">
+          <div className="flex gap-4 items-center">
+            <LanguageSwitcher />
             <Link
               to="/profile"
               className="
@@ -173,10 +182,12 @@ function Navbar() {
               px-6
               py-3
               rounded-2xl
+              min-w-[100px]
               font-bold
+              text-center
             "
             >
-              Profile
+              {t("profile")}
             </Link>
             <button
               onClick={logout}
@@ -189,10 +200,11 @@ function Navbar() {
               py-3
               rounded-2xl
               font-bold
+              min-w-[100px]
               cursor-pointer
             "
             >
-              Logout
+              {t("logout")}
             </button>
           </div>
         </div>
@@ -244,28 +256,28 @@ function Navbar() {
           >
 
             <p>
-              Tashkent:{" "}
+              {t("tashkent")}:{" "}
               {formatTime(
                 "Asia/Tashkent"
               )}
             </p>
 
             <p>
-              Moscow:{" "}
+              {t("moscow")}:{" "}
               {formatTime(
                 "Europe/Moscow"
               )}
             </p>
 
             <p>
-              London:{" "}
+              {t("london")}:{" "}
               {formatTime(
                 "Europe/London"
               )}
             </p>
 
             <p>
-              Washington:{" "}
+              {t("washington")}:{" "}
               {formatTime(
                 "America/New_York"
               )}
@@ -294,7 +306,7 @@ function Navbar() {
               duration-500
             "
             >
-              Books
+              {t("books")}
             </Link>
 
             {role === "ADMIN" && (
@@ -310,7 +322,7 @@ function Navbar() {
                 duration-300
               "
               >
-                Users
+                {t("users")}
               </Link>
             )}
 
@@ -326,7 +338,7 @@ function Navbar() {
               duration-300
             "
             >
-              Orders
+              {t("orders")}
             </Link>
 
           </div>
@@ -340,7 +352,7 @@ function Navbar() {
             pt-4
           "
           >
-
+            <LanguageSwitcher />
             <Link
               to="/profile"
               onClick={() =>
@@ -355,10 +367,11 @@ function Navbar() {
               py-3
               rounded-2xl
               font-bold
+              min-w-[140px]
               text-center
             "
             >
-              Profile
+              {t("profile")}
             </Link>
             <button
               onClick={logout}
@@ -371,10 +384,11 @@ function Navbar() {
               py-3
               rounded-2xl
               font-bold
+              min-w-[140px]
               cursor-pointer
             "
             >
-              Logout
+              {t("logout")}
             </button>
           </div>
         </div>

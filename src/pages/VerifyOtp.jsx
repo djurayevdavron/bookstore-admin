@@ -1,8 +1,10 @@
 import { useState } from "react";
 import API from "../api";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 function VerifyOtp() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const [otp, setOtp] =
@@ -21,10 +23,10 @@ function VerifyOtp() {
           otp,
         }
       );
-      alert("Account verified/Akkauntin tasdiqlandi!");
+      alert(t("accountVerified"));
       navigate("/");
     } catch (err) {
-      alert("OTP error");
+      alert(t("otpError"));
     }
   };
   return (
@@ -107,12 +109,12 @@ function VerifyOtp() {
             text-gray-800
           "
           >
-            Verify OTP
+            {t("verifyOtp")}
           </h1>
           <div className="space-y-5">
             <input
               type="text"
-              placeholder="OTP/OTP tasdiqlash kodini kiriting!"
+              placeholder={t("enterOtp")}
               onChange={(e) =>
                 setOtp(
                   e.target.value
@@ -146,7 +148,7 @@ function VerifyOtp() {
               cursor-pointer
             "
             >
-              Verify
+              {t("verify")}
             </button>
           </div>
         </div>

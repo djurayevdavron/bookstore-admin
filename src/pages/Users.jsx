@@ -1,19 +1,19 @@
 import {useEffect,useState,} from "react";
 import API from "../api";
 import Navbar from "../components/Navbar";
+import { useTranslation } from "react-i18next";
 
 function Users() {
+  const { t } = useTranslation();
   const [users, setUsers] =
     useState([]);
   const showError = (err) => {
     if (
       err.response?.status === 403
     ) {
-      alert(
-        "Only admin can see users"
-      );
+      alert(t("onlyAdminUsers"));
     } else {
-      alert("Something went wrong");
+      alert(t("somethingWentWrong"));
     }
   };
 
@@ -37,7 +37,7 @@ function Users() {
       await API.delete(
         `/users/${id}`
       );
-      alert("User deleted/Foydalanuvchi o'chirildi");
+      alert(t("userDeleted"));
       getUsers();
     } catch (err) {
       showError(err);
@@ -66,15 +66,14 @@ function Users() {
           mb-8
         "
         >
-          Users/Foydalanuvchilar
+          {t("users")}
         </h1>
         {/* USERS GRID */}
         <div
           className="
           grid
           grid-cols-1
-          md:grid-cols-2
-          2xl:grid-cols-3
+          xl:grid-cols-2
           gap-5
           sm:gap-7
         "
@@ -107,6 +106,10 @@ function Users() {
                 {user.fullName}
               </h2>
               {/* EMAIL qismi */}
+              <p className="mb-1 text-base sm:text-lg">
+                <strong>{t("profileEmail")}:</strong>
+              </p>
+
               <p
                 className="
                 mb-3
@@ -115,9 +118,6 @@ function Users() {
                 break-all
               "
               >
-                <strong>
-                  Email:
-                </strong>{" "}
                 {user.email}
               </p>
 
@@ -139,7 +139,7 @@ function Users() {
                 "
                 >
                   <strong>
-                    Role:
+                    {t("role")}:
                   </strong>{" "}
                   {user.role}
                 </p>
@@ -189,7 +189,7 @@ function Users() {
                 cursor-pointer
               "
               >
-                Delete
+                {t("delete")}
               </button>
             </div>
           ))}

@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import API from "../api";
 import Navbar from "../components/Navbar";
+import { useTranslation } from "react-i18next";
 
 function Books() {
+  const { t } = useTranslation(); 
   const [books, setBooks] = useState([]);
   const [title, setTitle] =
     useState("");
@@ -29,15 +31,13 @@ function Books() {
 
   const showError = (err) => {
     if (err.response?.status === 401) {
-      alert("Unauthorized");
+      alert(t("unauthorized"));
     } else if (
       err.response?.status === 403
     ) {
-      alert(
-        "Only admin can manage books"
-      );
+      alert(t("adminOnlyBooks"));
     } else {
-      alert("Something went wrong");
+      alert(t("somethingWentWrong"));
     }
   };
 
@@ -67,7 +67,7 @@ function Books() {
         stock: Number(stock),
         category,
       });
-      alert("Book created");
+      alert(t("bookCreated"));
       clearForm();
       getBooks();
     } catch (err) {
@@ -88,7 +88,7 @@ function Books() {
           category,
         }
       );
-      alert("Book updated");
+      alert(t("bookUpdated"));
       clearForm();
       getBooks();
     } catch (err) {
@@ -101,7 +101,7 @@ function Books() {
       await API.delete(
         `/books/${id}`
       );
-      alert("Book deleted");
+      alert(t("bookDeleted"));
       getBooks();
     } catch (err) {
       showError(err);
@@ -164,7 +164,7 @@ function Books() {
           lg:mb-10
         "
         >
-          Books/Kitoblar
+          {t("books")}
         </h1>
 
         {/* ADMIN FORM */}
@@ -193,7 +193,7 @@ function Books() {
             >
               <input
                 type="text"
-                placeholder="Title"
+                placeholder={t("title")}
                 value={title}
                 onChange={(e) =>
                   setTitle(
@@ -214,7 +214,7 @@ function Books() {
               />
               <input
                 type="text"
-                placeholder="Author"
+                placeholder={t("author")}
                 value={author}
                 onChange={(e) =>
                   setAuthor(
@@ -236,7 +236,7 @@ function Books() {
 
               <input
                 type="text"
-                placeholder="Description"
+                placeholder={t("description")}
                 value={description}
                 onChange={(e) =>
                   setDescription(
@@ -257,7 +257,7 @@ function Books() {
               />
               <input
                 type="number"
-                placeholder="Price"
+                placeholder={t("price")}
                 value={price}
                 onChange={(e) =>
                   setPrice(
@@ -278,7 +278,7 @@ function Books() {
               />
               <input
                 type="number"
-                placeholder="Stock"
+                placeholder={t("stock")}
                 value={stock}
                 onChange={(e) =>
                   setStock(
@@ -299,7 +299,7 @@ function Books() {
               />
               <input
                 type="text"
-                placeholder="Category"
+                placeholder={t("category")}
                 value={category}
                 onChange={(e) =>
                   setCategory(
@@ -345,8 +345,8 @@ function Books() {
             "
             >
               {editId
-                ? "Update Book"
-                : "Add Book"}
+                ? t("updateBook")
+                : t("addBook")}
             </button>
           </div>
         )}
@@ -399,7 +399,7 @@ function Books() {
               "
               >
                 <strong>
-                  Author:
+                  {t("author")}:
                 </strong>{" "}
                 {book.author}
               </p>
@@ -413,7 +413,7 @@ function Books() {
               "
               >
                 <strong>
-                  Description:
+                  {t("description")}:
                 </strong>{" "}
                 {book.description}
               </p>
@@ -427,7 +427,7 @@ function Books() {
               "
               >
                 <strong>
-                  Price:
+                  {t("price")}:
                 </strong>{" "}
                 {book.price}
               </p>
@@ -441,7 +441,7 @@ function Books() {
               "
               >
                 <strong>
-                  Stock:
+                  {t("stock")}:
                 </strong>{" "}
                 {book.stock}
               </p>
@@ -455,7 +455,7 @@ function Books() {
               "
               >
                 <strong>
-                  Category:
+                  {t("category")}:
                 </strong>{" "}
                 {book.category}
               </p>
@@ -491,7 +491,7 @@ function Books() {
                     cursor-pointer
                   "
                   >
-                    Edit
+                    {t("edit")}
                   </button>
                   <button
                     onClick={() =>
@@ -516,7 +516,7 @@ function Books() {
                     cursor-pointer
                   "
                   >
-                    Delete
+                    {t("delete")}
                   </button>
                 </div>
               )}

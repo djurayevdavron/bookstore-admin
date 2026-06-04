@@ -1,9 +1,11 @@
 import { useState } from "react";
 import API from "../api";
 import {useNavigate,Link,} from "react-router-dom";
+import { useTranslation } from "react-i18next";
   
 function Login() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [email, setEmail] =
     useState("");
@@ -37,7 +39,7 @@ function Login() {
       );
       navigate("/books");
     } catch (err) {
-      alert("Login error/Loginda xatolik!");
+      alert(t("loginError"));
     }
   };
   return (
@@ -121,12 +123,12 @@ function Login() {
             text-gray-800
           "
           >
-            Login
+            {t("login")}
           </h1>
           <div className="space-y-5">
             <input
               type="email"
-              placeholder="Email/Email manzil kiriting"
+              placeholder={t("email")}
               onChange={(e) =>
                 setEmail(
                   e.target.value
@@ -143,7 +145,7 @@ function Login() {
             />
             <input
               type="password"
-              placeholder="Password/Parol kiriting"
+              placeholder={t("password")}
               onChange={(e) =>
                 setPassword(
                   e.target.value
@@ -176,7 +178,7 @@ function Login() {
               cursor-pointer
             "
             >
-              Login
+              {t("login")}
             </button>
 
             <p
@@ -186,7 +188,7 @@ function Login() {
               sm:text-base
             "
             >
-              Don't have account?/Akkauntingiz yo'qmi?{" "}
+              {t("dontHaveAccount")}{" "}
               <Link
                 to="/register"
                 className="
@@ -194,7 +196,7 @@ function Login() {
                 font-semibold
               "
               >
-                Register/Registratsiya
+                {t("register")}
               </Link>
             </p>
           </div>

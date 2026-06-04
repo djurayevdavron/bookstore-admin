@@ -1,9 +1,11 @@
 import { useState } from "react";
 import API from "../api";
 import {useNavigate,Link,} from "react-router-dom";
+import { useTranslation } from "react-i18next";
   
 function Register() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [fullName, setFullName] =
     useState("");
@@ -29,10 +31,10 @@ function Register() {
         email
       );
 
-      alert("OTP sent/OTP tasdiqlash kodi elektron pochtaga yuborildi!");
+      alert(t("otpSent"));
       navigate("/verify-otp");
     } catch (err) {
-      alert("Register error/Registratsiya qilishda xatolik!");
+      alert(t("registerError"));
     }
   };
   return (
@@ -114,12 +116,12 @@ function Register() {
             text-gray-800
           "
           >
-            Register
+            {t("register")}
           </h1>
           <div className="space-y-5">
             <input
               type="text"
-              placeholder="Full Name/Ism va Familiya kiriting"
+              placeholder={t("fullName")}
               onChange={(e) =>
                 setFullName(
                   e.target.value
@@ -137,7 +139,7 @@ function Register() {
 
             <input
               type="email"
-              placeholder="Email/Email manzilingizni kiriting"
+              placeholder={t("email")}
               onChange={(e) =>
                 setEmail(
                   e.target.value
@@ -154,7 +156,7 @@ function Register() {
             />
             <input
               type="password"
-              placeholder="Password/Parol kiriting"
+              placeholder={t("password")}
               onChange={(e) =>
                 setPassword(
                   e.target.value
@@ -187,7 +189,7 @@ function Register() {
               cursor-pointer
             "
             >
-              Register
+              {t("register")}
             </button>
 
             <p
@@ -197,7 +199,7 @@ function Register() {
               sm:text-base
             "
             >
-              Already have account?/Akkauntingiz bormi?{" "}
+              {t("alreadyHaveAccount")}{" "}
               <Link
                 to="/"
                 className="
@@ -205,7 +207,7 @@ function Register() {
                 font-semibold
               "
               >
-                Login
+                {t("login")}
               </Link>
             </p>
           </div>

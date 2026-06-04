@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import API from "../api";
 import Navbar from "../components/Navbar";
+import { useTranslation } from "react-i18next";
 
 function Orders() {
+  const { t } = useTranslation();
   const [orders, setOrders] =
     useState([]);
 
@@ -24,24 +26,22 @@ function Orders() {
     if (
       err.response?.status === 409
     ) {
-      alert(
-        "You already have active order for this book"
-      );
+      alert(t("activeOrderExists"));
 
     } else if (
       err.response?.status === 400
     ) {
-      alert("Not enough stock");
+      alert(t("notEnoughStock"));
 
     } else if (
       err.response?.status === 401
     ) {
-      alert("Unauthorized");
+      alert(t("unauthorized"));
 
     } else if (
       err.response?.status === 403
     ) {
-      alert("Forbidden");
+      alert(t("forbidden"));
 
     } else if (
       err.response?.data?.message
@@ -51,7 +51,7 @@ function Orders() {
       );
 
     } else {
-      alert("Something went wrong");
+      alert(t("somethingWentWrong"));
     }
   };
 
@@ -99,7 +99,7 @@ function Orders() {
         bookId,
         quantity,
       });
-      alert("Order created/Buyurtma yaratilindi!");
+      alert(t("orderCreated"));
 
       getOrders();
       getBooks();
@@ -112,9 +112,7 @@ function Orders() {
       await API.delete(
         `/orders/${id}`
       );
-      alert(
-        "Order cancelled and stock restored/Buyurtma bekor qilindi va mahsulot soni qayta tiklandi"
-      );
+      alert(t("orderCancelled"));
       getOrders();
       getBooks();
     } catch (err) {
@@ -144,7 +142,7 @@ function Orders() {
           mb-8
         "
         >
-          Orders/Buyurtmalar
+          {t("orders")}
         </h1>
 
         {/* USER ORDER FORM */}
@@ -169,7 +167,7 @@ function Orders() {
               mb-6
             "
             >
-              Create Order/Yaratish
+              {t("createOrder")}
             </h2>
             {/* SELECT */}
             <select
@@ -193,7 +191,7 @@ function Orders() {
             "
             >
               <option>
-                Select Book
+                {t("selectBook")}
               </option>
               {books.map((book) => (
                 <option
@@ -202,7 +200,7 @@ function Orders() {
                 >
                   {book.title}
                   {" | "}
-                  Stock:
+                  {t("stock")}:
                   {book.stock}
                 </option>
               ))}
@@ -254,7 +252,7 @@ function Orders() {
               cursor-pointer
             "
             >
-              Create Order
+              {t("createOrder")}
             </button>
 
           </div>
@@ -294,7 +292,7 @@ function Orders() {
               "
               >
                 <strong>
-                  Book:
+                  {t("book")}:
                 </strong>{" "}
                 {
                   order.bookId?.title
@@ -310,7 +308,7 @@ function Orders() {
               "
               >
                 <strong>
-                  User:
+                  {t("user")}:
                 </strong>{" "}
                 {
                   order.userId
@@ -326,7 +324,7 @@ function Orders() {
               "
               >
                 <strong>
-                  Quantity:
+                  {t("quantity")}:
                 </strong>{" "}
                 {order.quantity}
               </p>
@@ -349,7 +347,7 @@ function Orders() {
                 "
                 >
                   <strong>
-                    Status:
+                    {t("status")}:
                   </strong>{" "}
                   {order.status}
                 </p>
@@ -395,7 +393,7 @@ function Orders() {
                 cursor-pointer
               "
               >
-                Cancel Order/Bekor qilish
+                {t("cancelOrder")}
               </button>
             </div>
           ))}

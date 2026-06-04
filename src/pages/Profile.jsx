@@ -1,16 +1,20 @@
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 function Profile() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const user = JSON.parse(
     localStorage.getItem("user")
   );
   const logout = () => {
-    localStorage.clear();
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    localStorage.removeItem("user");
 
     navigate("/");
-  };
+};
   return (
     <div
       className="
@@ -92,7 +96,7 @@ function Profile() {
             mb-10
           "
           >
-            Profile
+            {t("profile")}
           </h1>
 
           {/* USER INFO */}
@@ -113,7 +117,7 @@ function Profile() {
                 mb-2
               "
               >
-                Full Name
+                {t("profileFullName")}
               </p>
               <p
                 className="
@@ -140,7 +144,7 @@ function Profile() {
                 mb-2
               "
               >
-                Email
+                {t("profileEmail")}
               </p>
               <p
                 className="
@@ -172,7 +176,7 @@ function Profile() {
                   mb-2
                 "
                 >
-                  Role
+                  {t("role")}
                 </p>
 
                 <p
@@ -222,7 +226,7 @@ function Profile() {
               cursor-pointer
             "
             >
-              Logout
+              {t("logout")}
             </button>
           </div>
         </div>
