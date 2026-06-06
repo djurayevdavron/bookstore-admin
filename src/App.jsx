@@ -1,4 +1,4 @@
-import {BrowserRouter,Routes,Route,} from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import VerifyOtp from "./pages/VerifyOtp";
@@ -14,18 +14,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           {/* AUTh qismi */}
-          <Route
-            path="/"
-            element={<Login />}
-          />
-          <Route
-            path="/register"
-            element={<Register />}
-          />
-          <Route
-            path="/verify-otp"
-            element={<VerifyOtp />}
-          />
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/verify-otp" element={<VerifyOtp />} />
           {/* PROTECTED qismi*/}
           <Route
             path="/books"

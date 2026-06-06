@@ -55,5 +55,8 @@
   "enterOtp": "Введите OTP код",
   "verify": "Подтвердить",
   "accountVerified": "Аккаунт успешно подтверждён",
-  "otpError": "Неверный OTP код"
+  "otpError": "Неверный OTP код",
+  "cancel": "Отмена",
+  "areYouSureDelete": "Вы действительно хотите удалить этот элемент?",
+  "areYouSureCancelOrder": "Вы уверены, что хотите отменить этот заказ?"
 }

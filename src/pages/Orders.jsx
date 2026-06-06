@@ -2,76 +2,81 @@ import { useEffect, useState } from "react";
 import API from "../api";
 import Navbar from "../components/Navbar";
 import { useTranslation } from "react-i18next";
+import {
+  Snackbar,
+  Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
+  Skeleton,
+} from "@mui/material";
 
 function Orders() {
   const { t } = useTranslation();
-  const [orders, setOrders] =
-    useState([]);
+  const [skeletonCount, setSkeletonCount] = useState(2);
+  const [loading, setLoading] = useState(true);
 
-  const [books, setBooks] =
-    useState([]);
+  const [orders, setOrders] = useState([]);
 
-  const [bookId, setBookId] =
-    useState("");
+  const [books, setBooks] = useState([]);
 
-  const [quantity, setQuantity] =
-    useState(1);
+  const [bookId, setBookId] = useState("");
 
-  const role =
-    localStorage.getItem("role");
+  const [quantity, setQuantity] = useState(1);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+
+  const [deleteId, setDeleteId] = useState(null);
+
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const role = localStorage.getItem("role");
 
   const showError = (err) => {
-    console.log(err.response);
+    let message = t("somethingWentWrong");
 
-    if (
-      err.response?.status === 409
-    ) {
-      alert(t("activeOrderExists"));
-
-    } else if (
-      err.response?.status === 400
-    ) {
-      alert(t("notEnoughStock"));
-
-    } else if (
-      err.response?.status === 401
-    ) {
-      alert(t("unauthorized"));
-
-    } else if (
-      err.response?.status === 403
-    ) {
-      alert(t("forbidden"));
-
-    } else if (
-      err.response?.data?.message
-    ) {
-      alert(
-        err.response.data.message
-      );
-
-    } else {
-      alert(t("somethingWentWrong"));
+    if (err.response?.status === 409) {
+      message = t("activeOrderExists");
+    } else if (err.response?.status === 400) {
+      message = t("notEnoughStock");
+    } else if (err.response?.status === 401) {
+      message = t("unauthorized");
+    } else if (err.response?.status === 403) {
+      message = t("forbidden");
+    } else if (err.response?.data?.message) {
+      message = err.response.data.message;
     }
+
+    setSnackbar({
+      open: true,
+      message,
+      severity: "error",
+    });
   };
 
   const getOrders = async () => {
     try {
+      const res = await API.get("/orders");
 
-      const res = await API.get(
-        "/orders"
-      );
       setOrders(res.data.data);
+
+      setSkeletonCount(res.data.data.length || 2);
     } catch (err) {
       showError(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   const getBooks = async () => {
     try {
-      const res = await API.get(
-        "/books"
-      );
+      const res = await API.get("/books");
       setBooks(res.data.data);
     } catch (err) {
       showError(err);
@@ -79,17 +84,16 @@ function Orders() {
   };
 
   useEffect(() => {
-    const role =
-      JSON.parse(
-        atob(
-          localStorage
-            .getItem("token")
-            .split(".")[1]
-        )
-      ).role;
+    const role = JSON.parse(
+      atob(localStorage.getItem("token").split(".")[1]),
+    ).role;
+
     if (role === "ADMIN") {
       getOrders();
+    } else {
+      setLoading(false);
     }
+
     getBooks();
   }, []);
 
@@ -99,25 +103,37 @@ function Orders() {
         bookId,
         quantity,
       });
-      alert(t("orderCreated"));
-
+      setSnackbar({
+        open: true,
+        message: t("orderCreated"),
+        severity: "success",
+      });
+      setBookId("");
+      setQuantity(1);
       getOrders();
       getBooks();
     } catch (err) {
       showError(err);
     }
   };
-  const remove = async (id) => {
+  const remove = async () => {
     try {
-      await API.delete(
-        `/orders/${id}`
-      );
-      alert(t("orderCancelled"));
+      await API.delete(`/orders/${deleteId}`);
+
+      setSnackbar({
+        open: true,
+        message: t("orderCancelled"),
+        severity: "success",
+      });
+
       getOrders();
       getBooks();
     } catch (err) {
       showError(err);
     }
+
+    setOpenDialog(false);
+    setDeleteId(null);
   };
   return (
     <>
@@ -171,53 +187,37 @@ function Orders() {
             </h2>
             {/* SELECT */}
             <select
-              onChange={(e) =>
-                setBookId(
-                  e.target.value
-                )
-              }
+              value={bookId}
+              onChange={(e) => setBookId(e.target.value)}
               className="
-              w-full
-              bg-[#020617]
-              border
-              border-slate-700
-              outline-none
-              p-3
-              sm:p-4
-              rounded-2xl
-              text-sm
-              sm:text-base
-              mb-5
-            "
+  w-full
+  bg-[#020617]
+  border
+  border-slate-700
+  outline-none
+  p-3
+  sm:p-4
+  rounded-2xl
+  text-sm
+  sm:text-base
+  mb-5
+"
             >
-              <option>
-                {t("selectBook")}
-              </option>
+              <option value="">{t("selectBook")}</option>
               {books.map((book) => (
-                <option
-                  key={book._id}
-                  value={book._id}
-                >
+                <option key={book._id} value={book._id}>
                   {book.title}
                   {" | "}
-                  {t("stock")}:
-                  {book.stock}
+                  {t("stock")}:{book.stock}
                 </option>
               ))}
-
             </select>
 
             {/* QUANTITY/Qolganlari */}
             <input
               type="number"
               value={quantity}
-              onChange={(e) =>
-                setQuantity(
-                  Number(
-                    e.target.value
-                  )
-                )
-              }
+              onChange={(e) => setQuantity(Number(e.target.value))}
               className="
               w-full
               bg-[#020617]
@@ -254,7 +254,6 @@ function Orders() {
             >
               {t("createOrder")}
             </button>
-
           </div>
         )}
         {/* ORDERS GRID */}
@@ -268,10 +267,37 @@ function Orders() {
           sm:gap-7
         "
         >
-          {orders.map((order) => (
-            <div
-              key={order._id}
-              className="
+          {loading
+            ? [...Array(skeletonCount)].map((_, index) => (
+                <div
+                  key={index}
+                  className="
+      bg-[#0f172a]
+      border
+      border-slate-800
+      shadow-2xl
+      rounded-3xl
+      p-5
+      sm:p-7
+      "
+                >
+                  <Skeleton height={35} sx={{ bgcolor: "#020617", mb: 2 }} />
+                  <Skeleton height={35} sx={{ bgcolor: "#020617", mb: 2 }} />
+                  <Skeleton height={35} sx={{ bgcolor: "#020617", mb: 2 }} />
+                  <Skeleton height={35} sx={{ bgcolor: "#020617", mb: 4 }} />
+
+                  <Skeleton
+                    variant="rounded"
+                    width={180}
+                    height={50}
+                    sx={{ bgcolor: "#020617" }}
+                  />
+                </div>
+              ))
+            : orders.map((order) => (
+                <div
+                  key={order._id}
+                  className="
               bg-[#0f172a]
               border
               border-slate-800
@@ -282,55 +308,41 @@ function Orders() {
               hover:scale-[1.01]
               duration-500
             "
-            >
-              <p
-                className="
+                >
+                  <p
+                    className="
                 mb-4
                 text-base
                 sm:text-lg
                 break-words
               "
-              >
-                <strong>
-                  {t("book")}:
-                </strong>{" "}
-                {
-                  order.bookId?.title
-                }
-              </p>
+                  >
+                    <strong>{t("book")}:</strong> {order.bookId?.title}
+                  </p>
 
-              <p
-                className="
+                  <p
+                    className="
                 mb-4
                 text-base
                 sm:text-lg
                 break-words
               "
-              >
-                <strong>
-                  {t("user")}:
-                </strong>{" "}
-                {
-                  order.userId
-                    ?.fullName
-                }
-              </p>
+                  >
+                    <strong>{t("user")}:</strong> {order.userId?.fullName}
+                  </p>
 
-              <p
-                className="
+                  <p
+                    className="
                 mb-4
                 text-base
                 sm:text-lg
               "
-              >
-                <strong>
-                  {t("quantity")}:
-                </strong>{" "}
-                {order.quantity}
-              </p>
+                  >
+                    <strong>{t("quantity")}:</strong> {order.quantity}
+                  </p>
 
-              <div
-                className="
+                  <div
+                    className="
                 flex
                 items-center
                 justify-between
@@ -338,22 +350,18 @@ function Orders() {
                 gap-4
                 mb-6
               "
-              >
-
-                <p
-                  className="
+                  >
+                    <p
+                      className="
                   text-base
                   sm:text-lg
                 "
-                >
-                  <strong>
-                    {t("status")}:
-                  </strong>{" "}
-                  {order.status}
-                </p>
+                    >
+                      <strong>{t("status")}:</strong> {order.status}
+                    </p>
 
-                <span
-                  className="
+                    <span
+                      className="
                   bg-green-600
                   px-4
                   py-2
@@ -362,17 +370,18 @@ function Orders() {
                   sm:text-base
                   font-bold
                 "
-                >
-                  {order.status}
-                </span>
-              </div>
+                    >
+                      {order.status}
+                    </span>
+                  </div>
 
-              {/* CANCEL BUTTON qismi */}
-              <button
-                onClick={() =>
-                  remove(order._id)
-                }
-                className="
+                  {/* CANCEL BUTTON qismi */}
+                  <button
+                    onClick={() => {
+                      setDeleteId(order._id);
+                      setOpenDialog(true);
+                    }}
+                    className="
                 bg-gradient-to-r
                 from-red-500
                 to-pink-600
@@ -392,13 +401,55 @@ function Orders() {
                 duration-500
                 cursor-pointer
               "
-              >
-                {t("cancelOrder")}
-              </button>
-            </div>
-          ))}
+                  >
+                    {t("cancelOrder")}
+                  </button>
+                </div>
+              ))}
         </div>
       </div>
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+        <DialogTitle>{t("cancelOrder")}</DialogTitle>
+
+        <DialogContent>
+          <DialogContentText>{t("areYouSureDelete")}</DialogContentText>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(false)}>{t("cancel")}</Button>
+
+          <Button color="error" variant="contained" onClick={remove}>
+            {t("cancelOrder")}
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() =>
+          setSnackbar({
+            ...snackbar,
+            open: false,
+          })
+        }
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+      >
+        <Alert
+          severity={snackbar.severity}
+          variant="filled"
+          onClose={() =>
+            setSnackbar({
+              ...snackbar,
+              open: false,
+            })
+          }
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </>
   );
 }

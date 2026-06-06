@@ -5,16 +5,14 @@ function Profile() {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const user = JSON.parse(
-    localStorage.getItem("user")
-  );
+  const user = JSON.parse(localStorage.getItem("user"));
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     localStorage.removeItem("user");
 
     navigate("/");
-};
+  };
   return (
     <div
       className="
@@ -33,7 +31,6 @@ function Profile() {
       overflow-hidden
     "
     >
-
       {/* BACKGROUND BLUR */}
       <div
         className="
@@ -87,7 +84,6 @@ function Profile() {
 
         {/* RIGHT SIDE/O'ng taraf qismi */}
         <div className="p-10 lg:p-16">
-
           {/* TITLE qismi */}
           <h1
             className="
@@ -197,8 +193,7 @@ function Profile() {
                 font-bold
                 text-white
                 ${
-                  user?.role?.toLowerCase() ===
-                  "admin"
+                  user?.role?.toLowerCase() === "admin"
                     ? "bg-red-500"
                     : "bg-green-500"
                 }

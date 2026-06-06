@@ -6,6 +6,56 @@ Zamonaviy Book Store Admin Dashboard bo'lib, React, Tailwind CSS, Node.js, Expre
 
 ---
 
+# Screenshots | Suratlar
+
+## Authentication | Autentifikatsiya
+
+### Login
+
+![Login](./screenshots/login-filled.png)
+
+### Register | Ro'yxatdan o'tish
+
+![Register](./screenshots/register-page.png)
+
+### OTP Verification | OTP Tasdiqlash
+
+![OTP Verification](./screenshots/verify-otp-page.png)
+
+---
+
+## Dashboard
+
+### Books Page | Kitoblar Sahifasi
+
+![Books User](./screenshots/books-user.png)
+
+### Books Management | Kitoblarni Boshqarish
+
+![Books Management](./screenshots/books-management.png)
+
+### Users Management | Foydalanuvchilarni Boshqarish
+
+![Users Management](./screenshots/users-management.png)
+
+### Create Order | Buyurtma Yaratish
+
+![Create Order](./screenshots/create-order.png)
+
+### Orders Management | Buyurtmalarni Boshqarish
+
+![Orders Management](./screenshots/orders-management.png)
+
+### Profile Page | Profil Sahifasi
+
+![Profile](./screenshots/profile-page.png)
+
+### Delete Confirmation Dialog | O'chirishni Tasdiqlash Oynasi
+
+![Delete Confirmation](./screenshots/delete-confirmation-dialog.png)
+
+---
+
 # Features | Xususiyatlar
 
 * JWT Authentication — JWT autentifikatsiya
@@ -15,15 +65,19 @@ Zamonaviy Book Store Admin Dashboard bo'lib, React, Tailwind CSS, Node.js, Expre
 * Responsive Design — Responsive dizayn
 * Mobile Hamburger Menu — Mobile hamburger menu
 * Modern Premium UI — Zamonaviy premium UI
-* Book Management — Kitoblarni boshqarish
-* User Management — Userlarni boshqarish
-* Order Management — Orderlarni boshqarish
+* Book Management (CRUD) — Kitoblarni boshqarish (CRUD)
+* User Management — Foydalanuvchilarni boshqarish
+* Order Management — Buyurtmalarni boshqarish
+* Skeleton Loading States — Skeleton loading holatlari
+* Toast Notifications — Bildirishnomalar
+* Confirmation Dialogs — Tasdiqlash oynalari
 * Custom Favicon — Custom favicon
 * Responsive Navbar — Responsive navbar
-* Dark Dashboard Theme — Dark dashboard theme
+* Dark Dashboard Theme — Qorong'i dashboard mavzusi
 * Multi Language Support (UZ / RU / EN) — Ko'p tilli qo'llab-quvvatlash
 * Language Persistence with LocalStorage — Tilni LocalStorage orqali saqlash
 * Dynamic Translation with i18next — i18next orqali dinamik tarjima
+* World Clock Support — Dunyo soatlari ko'rsatilishi
 
 ---
 
@@ -37,6 +91,8 @@ Zamonaviy Book Store Admin Dashboard bo'lib, React, Tailwind CSS, Node.js, Expre
 * Axios
 * i18next
 * react-i18next
+* React Hot Toast
+* Material UI
 
 ## Backend
 
@@ -62,17 +118,17 @@ Ilova Mobile, Tablet, Laptop va Desktop qurilmalar uchun to'liq moslashtirilgan.
 
 The application supports three languages:
 
-* English 🇺🇸
-* Russian 🇷🇺
-* Uzbek 🇺🇿
+* English
+* Russian
+* Uzbek
 
 Users can switch language dynamically from the navbar. The selected language is stored in LocalStorage and remains active even after logout or page refresh.
 
 Ilova uchta tilni qo'llab-quvvatlaydi:
 
-* Ingliz tili 🇺🇸
-* Rus tili 🇷🇺
-* O'zbek tili 🇺🇿
+* Ingliz tili
+* Rus tili
+* O'zbek tili
 
 Foydalanuvchi navbar orqali tilni almashtirishi mumkin. Tanlangan til LocalStorage da saqlanadi va sahifa yangilanganda yoki tizimdan chiqilganda ham saqlanib qoladi.
 
@@ -84,7 +140,7 @@ Foydalanuvchi navbar orqali tilni almashtirishi mumkin. Tanlangan til LocalStora
 * Login — Tizimga kirish
 * OTP Verification — OTP tasdiqlash
 * JWT Token Authentication — JWT token autentifikatsiyasi
-* Protected Profile Page — Himoyalangan profile sahifasi
+* Protected Profile Page — Himoyalangan profil sahifasi
 
 ---
 

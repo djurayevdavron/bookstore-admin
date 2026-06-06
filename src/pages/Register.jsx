@@ -1,40 +1,40 @@
 import { useState } from "react";
 import API from "../api";
-import {useNavigate,Link,} from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-  
+import { TextField, Button, Alert, CircularProgress } from "@mui/material";
+
 function Register() {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const [fullName, setFullName] =
-    useState("");
+  const [fullName, setFullName] = useState("");
 
-  const [email, setEmail] =
-    useState("");
+  const [email, setEmail] = useState("");
 
-  const [password, setPassword] =
-    useState("");
+  const [password, setPassword] = useState("");
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const register = async () => {
     try {
-      await API.post(
-        "/auth/register",
-        {
-          fullName,
-          email,
-          password,
-        }
-      );
-      localStorage.setItem(
-        "verifyEmail",
-        email
-      );
+      setLoading(true);
+      setError("");
 
-      alert(t("otpSent"));
+      await API.post("/auth/register", {
+        fullName,
+        email,
+        password,
+      });
+
+      localStorage.setItem("verifyEmail", email);
+
       navigate("/verify-otp");
     } catch (err) {
-      alert(t("registerError"));
+      setError(t("registerError"));
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -119,78 +119,46 @@ function Register() {
             {t("register")}
           </h1>
           <div className="space-y-5">
-            <input
-              type="text"
-              placeholder={t("fullName")}
-              onChange={(e) =>
-                setFullName(
-                  e.target.value
-                )
-              }
-              className="
-              w-full
-              p-3
-              sm:p-4
-              rounded-xl
-              bg-[#eef2ff]
-              outline-none
-            "
+            {error && <Alert severity="error">{error}</Alert>}
+            <TextField
+              fullWidth
+              label={t("fullName")}
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
             />
 
-            <input
+            <TextField
+              fullWidth
+              label={t("email")}
               type="email"
-              placeholder={t("email")}
-              onChange={(e) =>
-                setEmail(
-                  e.target.value
-                )
-              }
-              className="
-              w-full
-              p-3
-              sm:p-4
-              rounded-xl
-              bg-[#eef2ff]
-              outline-none
-            "
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
-            <input
+            <TextField
+              fullWidth
+              label={t("password")}
               type="password"
-              placeholder={t("password")}
-              onChange={(e) =>
-                setPassword(
-                  e.target.value
-                )
-              }
-              className="
-              w-full
-              p-3
-              sm:p-4
-              rounded-xl
-              bg-[#eef2ff]
-              outline-none
-            "
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
-            <button
+            <Button
+              variant="contained"
+              fullWidth
               onClick={register}
-              className="
-              w-full
-              bg-[#c49a6c]
-              hover:bg-[#6f4d28]
-              hover:text-white
-              duration-300
-              text-white
-              p-3
-              sm:p-4
-              rounded-xl
-              text-base
-              sm:text-lg
-              shadow-lg
-              cursor-pointer
-            "
+              disabled={loading}
+              sx={{
+                backgroundColor: "#c49a6c",
+                "&:hover": {
+                  backgroundColor: "#6f4d28",
+                },
+              }}
             >
-              {t("register")}
-            </button>
+              {loading ? (
+                <CircularProgress size={22} color="inherit" />
+              ) : (
+                t("register")
+              )}
+            </Button>
 
             <p
               className="
@@ -203,7 +171,8 @@ function Register() {
               <Link
                 to="/"
                 className="
-                text-indigo-600
+                 text-[#6f4d28]
+                 hover:text-black
                 font-semibold
               "
               >

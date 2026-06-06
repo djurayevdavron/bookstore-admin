@@ -55,5 +55,8 @@
   "enterOtp": "OTP kodini kiriting",
   "verify": "Tasdiqlash",
   "accountVerified": "Akkaunt muvaffaqiyatli tasdiqlandi",
-  "otpError": "OTP kodi noto'g'ri"
+  "otpError": "OTP kodi noto'g'ri",
+  "cancel": "Bekor qilish",
+  "areYouSureDelete": "Rostdan ham o'chirasizmi?",
+  "areYouSureCancelOrder": "Rostdan ham buyurtmani bekor qilasizmi?"
 }

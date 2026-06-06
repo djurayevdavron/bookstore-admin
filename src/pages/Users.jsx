@@ -1,47 +1,76 @@
-import {useEffect,useState,} from "react";
+import { useEffect, useState } from "react";
 import API from "../api";
 import Navbar from "../components/Navbar";
 import { useTranslation } from "react-i18next";
+import {
+  Snackbar,
+  Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
+  Skeleton,
+} from "@mui/material";
 
 function Users() {
   const { t } = useTranslation();
-  const [users, setUsers] =
-    useState([]);
+  const [loading, setLoading] = useState(true);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+
+  const [deleteId, setDeleteId] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [skeletonCount, setSkeletonCount] = useState(2);
+  const [users, setUsers] = useState([]);
   const showError = (err) => {
-    if (
-      err.response?.status === 403
-    ) {
-      alert(t("onlyAdminUsers"));
-    } else {
-      alert(t("somethingWentWrong"));
-    }
+    setSnackbar({
+      open: true,
+      message:
+        err.response?.status === 403
+          ? t("onlyAdminUsers")
+          : t("somethingWentWrong"),
+      severity: "error",
+    });
   };
 
   const getUsers = async () => {
     try {
+      const res = await API.get("/users");
 
-      const res = await API.get(
-        "/users"
-      );
       setUsers(res.data.data);
+      setSkeletonCount(res.data.data.length || 2);
     } catch (err) {
       showError(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     getUsers();
   }, []);
-  const remove = async (id) => {
+  const remove = async () => {
     try {
-      await API.delete(
-        `/users/${id}`
-      );
-      alert(t("userDeleted"));
+      await API.delete(`/users/${deleteId}`);
+
+      setSnackbar({
+        open: true,
+        message: t("userDeleted"),
+        severity: "success",
+      });
+
       getUsers();
     } catch (err) {
       showError(err);
     }
+
+    setOpenDialog(false);
+    setDeleteId(null);
   };
   return (
     <>
@@ -78,10 +107,44 @@ function Users() {
           sm:gap-7
         "
         >
-          {users.map((user) => (
-            <div
-              key={user._id}
-              className="
+          {loading
+            ? [...Array(skeletonCount)].map((_, index) => (
+                <div
+                  key={index}
+                  className="
+      bg-[#0f172a]
+      border
+      border-slate-800
+      rounded-3xl
+      p-5
+      sm:p-7
+      shadow-2xl
+    "
+                >
+                  <Skeleton height={50} sx={{ bgcolor: "#020617", mb: 3 }} />
+
+                  <Skeleton height={30} sx={{ bgcolor: "#020617", mb: 2 }} />
+
+                  <Skeleton height={30} sx={{ bgcolor: "#020617", mb: 2 }} />
+
+                  <Skeleton
+                    height={40}
+                    width={120}
+                    sx={{ bgcolor: "#020617", mb: 4 }}
+                  />
+
+                  <Skeleton
+                    variant="rounded"
+                    width={140}
+                    height={50}
+                    sx={{ bgcolor: "#020617" }}
+                  />
+                </div>
+              ))
+            : users.map((user) => (
+                <div
+                  key={user._id}
+                  className="
               bg-[#0f172a]
               border
               border-slate-800
@@ -92,38 +155,38 @@ function Users() {
               hover:scale-[1.01]
               duration-300
             "
-            >
-              {/* USER NAME */}
-              <h2
-                className="
+                >
+                  {/* USER NAME */}
+                  <h2
+                    className="
                 text-2xl
                 sm:text-3xl
                 font-bold
                 mb-5
                 break-words
               "
-              >
-                {user.fullName}
-              </h2>
-              {/* EMAIL qismi */}
-              <p className="mb-1 text-base sm:text-lg">
-                <strong>{t("profileEmail")}:</strong>
-              </p>
+                  >
+                    {user.fullName}
+                  </h2>
+                  {/* EMAIL qismi */}
+                  <p className="mb-1 text-base sm:text-lg">
+                    <strong>{t("profileEmail")}:</strong>
+                  </p>
 
-              <p
-                className="
+                  <p
+                    className="
                 mb-3
                 text-base
                 sm:text-lg
                 break-all
               "
-              >
-                {user.email}
-              </p>
+                  >
+                    {user.email}
+                  </p>
 
-              {/* ROLE qismi */}
-              <div
-                className="
+                  {/* ROLE qismi */}
+                  <div
+                    className="
                 flex
                 items-center
                 justify-between
@@ -131,20 +194,17 @@ function Users() {
                 mb-6
                 flex-wrap
               "
-              >
-                <p
-                  className="
+                  >
+                    <p
+                      className="
                   text-base
                   sm:text-lg
                 "
-                >
-                  <strong>
-                    {t("role")}:
-                  </strong>{" "}
-                  {user.role}
-                </p>
-                <span
-                  className={`
+                    >
+                      <strong>{t("role")}:</strong> {user.role}
+                    </p>
+                    <span
+                      className={`
                   px-4
                   py-2
                   rounded-full
@@ -152,23 +212,19 @@ function Users() {
                   sm:text-base
                   font-bold
                   text-white
-                  ${
-                    user.role ===
-                    "ADMIN"
-                      ? "bg-red-500"
-                      : "bg-green-500"
-                  }
+                  ${user.role === "ADMIN" ? "bg-red-500" : "bg-green-500"}
                 `}
-                >
-                  {user.role}
-                </span>
-              </div>
-              {/* DELETE BUTTON qismi */}
-              <button
-                onClick={() =>
-                  remove(user._id)
-                }
-                className="
+                    >
+                      {user.role}
+                    </span>
+                  </div>
+                  {/* DELETE BUTTON qismi */}
+                  <button
+                    onClick={() => {
+                      setDeleteId(user._id);
+                      setOpenDialog(true);
+                    }}
+                    className="
                 bg-gradient-to-r
                 from-red-500
                 to-pink-600
@@ -188,13 +244,56 @@ function Users() {
                 duration-300
                 cursor-pointer
               "
-              >
-                {t("delete")}
-              </button>
-            </div>
-          ))}
+                  >
+                    {t("delete")}
+                  </button>
+                </div>
+              ))}
         </div>
       </div>
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+        <DialogTitle>{t("delete")}</DialogTitle>
+
+        <DialogContent>
+          <DialogContentText>{t("areYouSureDelete")}</DialogContentText>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(false)}>{t("cancel")}</Button>
+
+          <Button color="error" variant="contained" onClick={remove}>
+            {t("delete")}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() =>
+          setSnackbar({
+            ...snackbar,
+            open: false,
+          })
+        }
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+      >
+        <Alert
+          severity={snackbar.severity}
+          variant="filled"
+          onClose={() =>
+            setSnackbar({
+              ...snackbar,
+              open: false,
+            })
+          }
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </>
   );
 }

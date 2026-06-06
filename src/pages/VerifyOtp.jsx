@@ -2,31 +2,33 @@ import { useState } from "react";
 import API from "../api";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { TextField, Button, Alert, CircularProgress } from "@mui/material";
 
 function VerifyOtp() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const [otp, setOtp] =
-    useState("");
+  const [otp, setOtp] = useState("");
 
-  const email =
-    localStorage.getItem(
-      "verifyEmail"
-    );
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const email = localStorage.getItem("verifyEmail");
   const verifyOtp = async () => {
     try {
-      await API.post(
-        "/auth/verify-otp",
-        {
-          email,
-          otp,
-        }
-      );
-      alert(t("accountVerified"));
+      setLoading(true);
+      setError("");
+
+      await API.post("/auth/verify-otp", {
+        email,
+        otp,
+      });
+
       navigate("/");
     } catch (err) {
-      alert(t("otpError"));
+      setError(t("otpError"));
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -112,44 +114,32 @@ function VerifyOtp() {
             {t("verifyOtp")}
           </h1>
           <div className="space-y-5">
-            <input
-              type="text"
-              placeholder={t("enterOtp")}
-              onChange={(e) =>
-                setOtp(
-                  e.target.value
-                )
-              }
-              className="
-              w-full
-              p-3
-              sm:p-4
-              rounded-xl
-              bg-[#eef2ff]
-              outline-none
-            "
+            {error && <Alert severity="error">{error}</Alert>}
+            <TextField
+              fullWidth
+              label={t("enterOtp")}
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
             />
 
-            <button
+            <Button
+              variant="contained"
+              fullWidth
               onClick={verifyOtp}
-              className="
-              w-full
-              bg-[#c49a6c]
-              hover:bg-[#6f4d28]
-              hover:text-white
-              duration-500
-              text-white
-              p-3
-              sm:p-4
-              rounded-xl
-              text-base
-              sm:text-lg
-              shadow-lg
-              cursor-pointer
-            "
+              disabled={loading}
+              sx={{
+                backgroundColor: "#c49a6c",
+                "&:hover": {
+                  backgroundColor: "#6f4d28",
+                },
+              }}
             >
-              {t("verify")}
-            </button>
+              {loading ? (
+                <CircularProgress size={22} color="inherit" />
+              ) : (
+                t("verify")
+              )}
+            </Button>
           </div>
         </div>
       </div>

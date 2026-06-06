@@ -1,45 +1,40 @@
 import { useState } from "react";
 import API from "../api";
-import {useNavigate,Link,} from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-  
+import { TextField, Button, Alert, CircularProgress } from "@mui/material";
+
 function Login() {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const [email, setEmail] =
-    useState("");
+  const [email, setEmail] = useState("");
 
-  const [password, setPassword] =
-    useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const login = async () => {
     try {
-      const res = await API.post(
-        "/auth/login",
-        {
-          email,
-          password,
-        }
-      );
-      localStorage.setItem(
-        "token",
-        res.data.token
-      );
-      localStorage.setItem(
-        "role",
-        res.data.data.role
-      );
+      setLoading(true);
+      setError("");
 
-      localStorage.setItem(
-        "user",
-        JSON.stringify(
-          res.data.data
-        )
-      );
+      const res = await API.post("/auth/login", {
+        email,
+        password,
+      });
+
+      localStorage.setItem("token", res.data.token);
+
+      localStorage.setItem("role", res.data.data.role);
+
+      localStorage.setItem("user", JSON.stringify(res.data.data));
+
       navigate("/books");
     } catch (err) {
-      alert(t("loginError"));
+      setError(t("loginError"));
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -96,7 +91,7 @@ function Login() {
       </div>
       {/* RIGHT SIDE/O'ng taraf qismi */}
       <div
-       className="
+        className="
         w-full
         lg:w-1/2
         flex
@@ -107,7 +102,7 @@ function Login() {
         sm:px-8
         py-10
         "
-      > 
+      >
         <div
           className="
           w-full
@@ -126,75 +121,56 @@ function Login() {
             {t("login")}
           </h1>
           <div className="space-y-5">
-            <input
+            {error && <Alert severity="error">{error}</Alert>}
+            <TextField
+              fullWidth
+              label={t("email")}
               type="email"
-              placeholder={t("email")}
-              onChange={(e) =>
-                setEmail(
-                  e.target.value
-                )
-              }
-              className="
-              w-full
-              p-3
-              sm:p-4
-              rounded-xl
-              bg-[#eef2ff]
-              outline-none
-            "
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
-            <input
+            <TextField
+              fullWidth
+              label={t("password")}
               type="password"
-              placeholder={t("password")}
-              onChange={(e) =>
-                setPassword(
-                  e.target.value
-                )
-              }
-              className="
-              w-full
-              p-3
-              sm:p-4
-              rounded-xl
-              bg-[#eef2ff]
-              outline-none
-            "
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
-            <button
+            <Button
+              variant="contained"
+              fullWidth
               onClick={login}
-              className="
-              w-full
-              bg-[#c49a6c]
-              hover:bg-[#6f4d28]
-              hover:text-white
-              duration-300
-              text-white
-              p-3
-              sm:p-4
-              rounded-xl
-              text-base
-              sm:text-lg
-              shadow-lg
-              cursor-pointer
-            "
+              disabled={loading}
+              sx={{
+                backgroundColor: "#c49a6c",
+                "&:hover": {
+                  backgroundColor: "#6f4d28",
+                },
+              }}
             >
-              {t("login")}
-            </button>
+              {loading ? (
+                <CircularProgress size={22} color="inherit" />
+              ) : (
+                t("login")
+              )}
+            </Button>
 
             <p
               className="
               text-center
               text-sm
               sm:text-base
-            "
+              "
             >
               {t("dontHaveAccount")}{" "}
               <Link
                 to="/register"
                 className="
-                text-indigo-600
+                text-[#6f4d28]
+                hover:text-black
                 font-semibold
-              "
+                duration-300
+                "
               >
                 {t("register")}
               </Link>

@@ -55,5 +55,8 @@
   "enterOtp": "Enter OTP code",
   "verify": "Verify",
   "accountVerified": "Account verified successfully",
-  "otpError": "Invalid OTP code"
+  "otpError": "Invalid OTP code",
+  "cancel": "Cancel",
+  "areYouSureDelete": "Are you sure you want to delete this item?",
+  "areYouSureCancelOrder": "Are you sure you want to cancel this order?"
 }

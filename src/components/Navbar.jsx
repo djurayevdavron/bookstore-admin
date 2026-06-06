@@ -1,55 +1,47 @@
-import { Link,useNavigate,} from "react-router-dom";
-import {useEffect,useState,} from "react";
-import { Menu,X,} from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Menu, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./LanguageSwitcher";
 
 function Navbar() {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const role =
-    localStorage.getItem("role");
-  const [time, setTime] =
-    useState(new Date());
-  const [menuOpen, setMenuOpen] =
-    useState(false);
+  const role = localStorage.getItem("role");
+  const [time, setTime] = useState(new Date());
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-  const interval = setInterval(() => {
-    setTime(new Date());
-  }, 1000);
+    const interval = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
 
-  return () =>
-    clearInterval(interval);
-}, []);
+    return () => clearInterval(interval);
+  }, []);
 
-const logout = () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("role");
-  localStorage.removeItem("user");
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    localStorage.removeItem("user");
 
-  navigate("/");
-};
-  const formatTime = (
-    timezone
-  ) => {
-    return time.toLocaleTimeString(
-      "en-US",
-      {
-        timeZone: timezone,
-      }
-    );
+    navigate("/");
+  };
+  const formatTime = (timezone) => {
+    return time.toLocaleTimeString("en-US", {
+      timeZone: timezone,
+      hour12: false,
+    });
   };
   return (
     <div
       className="
-      bg-[#262727]
-      text-white
-      border-b
-      border-[#1f2a4d]
-      relative
-      z-50
-    "
+  bg-[#262727]
+  text-white
+  border-b
+  border-[#1f2a4d]
+  relative
+  z-50
+"
     >
       {/* TOP NAVBAR qismi */}
       <div
@@ -61,6 +53,7 @@ const logout = () => {
         sm:px-6
         lg:px-10
         py-5
+        bg-[#2a2a2a]
       "
       >
         {/* LOGO qismi */}
@@ -72,16 +65,16 @@ const logout = () => {
           "
         >
           <img
-          src="/logo.png"
-          alt="logo"
-          className="
+            src="/logo.png"
+            alt="logo"
+            className="
           w-20
           h-20
           md:w-24
           md:h-24
           object-contain
           "
-        />
+          />
         </div>
         {/* DESKTOP MENU qismi */}
         <div
@@ -101,7 +94,8 @@ const logout = () => {
               className="
               font-bold
               text-2xl
-              hover:text-red-700
+              text-slate-300
+              hover:text-slate-400
               duration-300
             "
             >
@@ -113,7 +107,8 @@ const logout = () => {
                 className="
                 font-bold
                 text-2xl
-                hover:text-red-700
+                text-slate-300
+                hover:text-slate-400
                 duration-500
               "
               >
@@ -125,7 +120,8 @@ const logout = () => {
               className="
               font-bold
               text-2xl
-              hover:text-red-700
+              text-slate-300
+              hover:text-slate-400
               duration-500
             "
             >
@@ -141,31 +137,21 @@ const logout = () => {
             font-semibold
             text-[#B17A50]
             text-base
+            text-slate-300
+            
           "
           >
             <p>
-              {t("tashkent")}:{" "}
-              {formatTime(
-                "Asia/Tashkent"
-              )}
+              {t("tashkent")} {formatTime("Asia/Tashkent")}
             </p>
             <p>
-              {t("moscow")}:{" "}
-              {formatTime(
-                "Europe/Moscow"
-              )}
+              {t("moscow")} {formatTime("Europe/Moscow")}
             </p>
             <p>
-              {t("london")}:{" "}
-              {formatTime(
-                "Europe/London"
-              )}
+              {t("london")} {formatTime("Europe/London")}
             </p>
             <p>
-              {t("washington")}:{" "}
-              {formatTime(
-                "America/New_York"
-              )}
+              {t("washington")} {formatTime("America/New_York")}
             </p>
           </div>
 
@@ -175,8 +161,8 @@ const logout = () => {
             <Link
               to="/profile"
               className="
-              bg-indigo-700
-              hover:bg-indigo-900
+              bg-slate-700
+              hover:bg-slate-600
               hover:text-black
               duration-500
               px-6
@@ -192,8 +178,8 @@ const logout = () => {
             <button
               onClick={logout}
               className="
-              bg-red-500
-              hover:bg-red-700
+              bg-[#991b1b]
+              hover:bg-[#7f1d1d]
               hover:text-black
               duration-500
               px-6
@@ -210,19 +196,13 @@ const logout = () => {
         </div>
         {/* MOBILE BUTTON qismi*/}
         <button
-          onClick={() =>
-            setMenuOpen(!menuOpen)
-          }
+          onClick={() => setMenuOpen(!menuOpen)}
           className="
           xl:hidden
           cursor-pointer
         "
         >
-          {menuOpen ? (
-            <X size={34} />
-          ) : (
-            <Menu size={34} />
-          )}
+          {menuOpen ? <X size={34} /> : <Menu size={34} />}
         </button>
       </div>
       {/* MOBILE MENU qismi */}
@@ -246,7 +226,7 @@ const logout = () => {
             flex
             flex-col
             gap-3
-            text-[#B17A50]
+            text-slate-300
             font-semibold
             text-sm
             pb-4
@@ -254,35 +234,21 @@ const logout = () => {
             border-[#1f2a4d]
           "
           >
-
             <p>
-              {t("tashkent")}:{" "}
-              {formatTime(
-                "Asia/Tashkent"
-              )}
+              {t("tashkent")}: {formatTime("Asia/Tashkent")}
             </p>
 
             <p>
-              {t("moscow")}:{" "}
-              {formatTime(
-                "Europe/Moscow"
-              )}
+              {t("moscow")}: {formatTime("Europe/Moscow")}
             </p>
 
             <p>
-              {t("london")}:{" "}
-              {formatTime(
-                "Europe/London"
-              )}
+              {t("london")}: {formatTime("Europe/London")}
             </p>
 
             <p>
-              {t("washington")}:{" "}
-              {formatTime(
-                "America/New_York"
-              )}
+              {t("washington")}: {formatTime("America/New_York")}
             </p>
-
           </div>
 
           {/* LINKS */}
@@ -296,9 +262,7 @@ const logout = () => {
           >
             <Link
               to="/books"
-              onClick={() =>
-                setMenuOpen(false)
-              }
+              onClick={() => setMenuOpen(false)}
               className="
               text-xl
               font-bold
@@ -312,9 +276,7 @@ const logout = () => {
             {role === "ADMIN" && (
               <Link
                 to="/users"
-                onClick={() =>
-                  setMenuOpen(false)
-                }
+                onClick={() => setMenuOpen(false)}
                 className="
                 text-xl
                 font-bold
@@ -328,9 +290,7 @@ const logout = () => {
 
             <Link
               to="/orders"
-              onClick={() =>
-                setMenuOpen(false)
-              }
+              onClick={() => setMenuOpen(false)}
               className="
               text-xl
               font-bold
@@ -340,7 +300,6 @@ const logout = () => {
             >
               {t("orders")}
             </Link>
-
           </div>
 
           {/* BUTTONS */}
@@ -355,12 +314,10 @@ const logout = () => {
             <LanguageSwitcher />
             <Link
               to="/profile"
-              onClick={() =>
-                setMenuOpen(false)
-              }
+              onClick={() => setMenuOpen(false)}
               className="
-              bg-indigo-700
-              hover:bg-indigo-900
+              bg-slate-700
+              hover:bg-slate-600
               hover:text-white
               duration-300
               px-6
@@ -376,8 +333,8 @@ const logout = () => {
             <button
               onClick={logout}
               className="
-              bg-red-500
-              hover:bg-red-700
+              bg-[#991b1b]
+              hover:bg-[#7f1d1d]
               hover:text-black
               duration-500
               px-6

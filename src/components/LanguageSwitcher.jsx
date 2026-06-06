@@ -3,19 +3,17 @@ import { useTranslation } from "react-i18next";
 function LanguageSwitcher() {
   const { i18n } = useTranslation();
 
- const changeLanguage = (lang) => {
-  i18n.changeLanguage(lang);
-  localStorage.setItem("lang", lang);
-};
+  const changeLanguage = (lang) => {
+    i18n.changeLanguage(lang);
+    localStorage.setItem("lang", lang);
+  };
   return (
     <select
-  value={i18n.language}
-  onChange={(e) =>
-    changeLanguage(e.target.value)
-  }
-  className="
-  bg-indigo-700
-  hover:bg-indigo-900
+      value={i18n.language}
+      onChange={(e) => changeLanguage(e.target.value)}
+      className="
+  bg-slate-700
+  hover:bg-slate-600
   hover:text-black
   text-white
   duration-500
@@ -28,11 +26,11 @@ function LanguageSwitcher() {
   outline-none
   border-none
   "
->
-  <option value="uz">O'zbek</option>
-  <option value="ru">Русский</option>
-  <option value="en">English</option>
-</select>
+    >
+      <option value="uz">O'zbek</option>
+      <option value="ru">Русский</option>
+      <option value="en">English</option>
+    </select>
   );
 }
 export default LanguageSwitcher;
