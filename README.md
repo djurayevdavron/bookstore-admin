@@ -1,8 +1,12 @@
 # BookStore Admin
 
-A modern Book Store Admin Dashboard built with React, Tailwind CSS, Node.js, Express, MongoDB, JWT Authentication, OTP Verification, and Multi Language Support.
+A modern full-stack Book Store Admin Dashboard built with React, TypeScript, Tailwind CSS, Node.js, Express, MongoDB, JWT Authentication, OTP Verification, and Multi Language Support.
 
-Zamonaviy Book Store Admin Dashboard bo'lib, React, Tailwind CSS, Node.js, Express, MongoDB, JWT Authentication, OTP Verification va Multi Language Support yordamida yaratilgan.
+This project provides authentication, role-based access control, book management, user management, order management, and multilingual support with a modern responsive UI.
+
+Zamonaviy full-stack Book Store Admin Dashboard bo'lib, React, TypeScript, Tailwind CSS, Node.js, Express, MongoDB, JWT Authentication, OTP Verification va Multi Language Support yordamida yaratilgan.
+
+Loyiha autentifikatsiya, role asosidagi ruxsatlar, kitoblar boshqaruvi, foydalanuvchilar boshqaruvi, buyurtmalar boshqaruvi hamda ko'p tillilik imkoniyatlarini zamonaviy responsive interfeys bilan taqdim etadi.
 
 ---
 
@@ -86,6 +90,7 @@ Zamonaviy Book Store Admin Dashboard bo'lib, React, Tailwind CSS, Node.js, Expre
 ## Frontend
 
 * React.js
+* TypeScript
 * Tailwind CSS
 * React Router DOM
 * Axios
@@ -104,6 +109,65 @@ Zamonaviy Book Store Admin Dashboard bo'lib, React, Tailwind CSS, Node.js, Expre
 * Bcrypt
 * Brevo Email Service
 
+---
+
+# TypeScript Migration | TypeScript Migratsiyasi
+
+The project has been fully migrated from JavaScript to TypeScript.
+
+Migrated files:
+
+* Books.jsx - Books.tsx
+* Users.jsx - Users.tsx
+* Login.jsx - Login.tsx
+* Register.jsx - Register.tsx
+* VerifyOtp.jsx - VerifyOtp.tsx
+* Profile.jsx - Profile.tsx
+* Orders.jsx - Orders.tsx
+* ProtectedRoute.jsx - ProtectedRoute.tsx
+* App.jsx - App.tsx
+* main.jsx - main.tsx
+* Navbar.jsx - Navbar.tsx
+* LanguageSwitcher.jsx - LanguageSwitcher.tsx
+* api.js - api.ts
+
+Implemented TypeScript features:
+
+* Interfaces for data models
+* Typed useState hooks
+* Promise return types
+* ReactNode typed props
+* Type-safe LocalStorage usage
+* Strict TypeScript mode
+
+---
+
+Loyiha JavaScript dan TypeScript ga to'liq o'tkazilgan.
+
+O'tkazilgan fayllar:
+
+* Books.jsx → Books.tsx
+* Users.jsx → Users.tsx
+* Login.jsx → Login.tsx
+* Register.jsx → Register.tsx
+* VerifyOtp.jsx → VerifyOtp.tsx
+* Profile.jsx → Profile.tsx
+* Orders.jsx → Orders.tsx
+* ProtectedRoute.jsx → ProtectedRoute.tsx
+* App.jsx → App.tsx
+* main.jsx → main.tsx
+* Navbar.jsx → Navbar.tsx
+* LanguageSwitcher.jsx → LanguageSwitcher.tsx
+* api.js → api.ts
+
+Qo'shilgan TypeScript imkoniyatlari:
+
+* Interface lar yordamida ma'lumotlarni tiplashtirish
+* Typed useState hook lar
+* Promise return type lar
+* ReactNode typed props
+* Type-safe LocalStorage ishlatish
+* Strict TypeScript mode
 ---
 
 # Responsive Design | Responsive Dizayn
